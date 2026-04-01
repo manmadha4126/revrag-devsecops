@@ -1,0 +1,26 @@
+name: Secure Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: docker build -t myuser/myapp:${{ github.sha }} .
+
+      - uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: myuser/myapp:${{ github.sha }}
+          exit-code: '1'
+          severity: 'CRITICAL'
+          output: 'trivy-report.txt'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: trivy-report
+          path: trivy-report.txt
