@@ -13,7 +13,7 @@ jobs:
 
       - run: docker build -t myuser/myapp:${{ github.sha }} .
 
-      - uses: aquasecurity/trivy-action@0.20.0
+      - uses: uses: aquasecurity/trivy-action@master
         with:
           image-ref: myuser/myapp:${{ github.sha }}
           exit-code: '1'
